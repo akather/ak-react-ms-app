@@ -6,6 +6,7 @@ build/
 *.iml
 *.ipr
 .apt_generated
+node_modules/
 
 # Compiled class file
 *.class
