@@ -1,29 +1,14 @@
-# Use an official Node runtime as a parent image
-FROM node:16-alpine as build
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
-COPY . .
-
-# Build the app
-RUN npm run build
-
-# Use nginx to serve the static content
+# Use an Nginx base image
 FROM nginx:alpine
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /app/build /usr/share/nginx/html
+# Remove the default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
 
-# Expose port 80 to the outside world
+# Copy static content to nginx serving directory
+COPY ./react1 /usr/share/nginx/html
+
+# Expose port 80 for the container
 EXPOSE 80
 
-# Start nginx
+# Start Nginx when the container has provisioned
 CMD ["nginx", "-g", "daemon off;"]
