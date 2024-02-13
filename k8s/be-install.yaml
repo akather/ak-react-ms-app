@@ -1,0 +1,39 @@
+# Deployment yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms1-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms1-backend
+  template:
+    metadata:
+      labels:
+        app: ms1-backend
+    spec:
+      containers:
+      - name: ms1-backend
+        image: hikather/kapps:ms1.1
+        ports:
+        - containerPort: 8080
+          name: ms1-backend
+
+# Service yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms1-backend
+spec:
+  selector:
+    app: ms1-backend
+  ports:
+    - protocol: TCP
+      name: ms1-backend
+      port: 8080
+      targetPort: 8080
+      nodePort: 31032
+

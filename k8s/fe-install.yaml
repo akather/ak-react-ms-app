@@ -1,0 +1,39 @@
+# Deployment yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui-frontend
+  template:
+    metadata:
+      labels:
+        app: ui-frontend
+    spec:
+      containers:
+      - name: ui-frontend
+        image: hikather/knginx:react5
+        ports:
+        - containerPort: 3000
+          name: ui-frontend
+
+# Service yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-frontend
+spec:
+  selector:
+    app: ui-frontend
+  type: NodePort
+  ports:
+    - protocol: TCP
+      name: ui-frontend
+      port: 3000
+      targetPort: 3000
+      nodePort: 31031
