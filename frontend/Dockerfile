@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy static content to nginx serving directory
-COPY ./react1 /usr/share/nginx/html
+COPY ./jar_files /usr/share/nginx/html
 
 # Expose port 80 for the container
 EXPOSE 80

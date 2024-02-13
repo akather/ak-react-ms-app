@@ -9,6 +9,6 @@ import java.util.Date;
 public class HelloController {
     @GetMapping("/api/hello")
     public String hello() {
-        return "Hello AK, the PARAMOUNT time at the server is now " + new Date() + "\n";
+        return "Hello AK, the Universal time at the server is now " + new Date() + "\n";
     }
 }
