@@ -30,6 +30,7 @@ metadata:
 spec:
   selector:
     app: ms1-backend
+  type: NodePort
   ports:
     - protocol: TCP
       name: ms1-backend

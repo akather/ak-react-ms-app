@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ui-frontend
-        image: hikather/knginx:react5
+        image: hikather/knginx:react5.1
         ports:
         - containerPort: 3000
           name: ui-frontend
