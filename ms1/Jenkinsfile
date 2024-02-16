@@ -1,0 +1,60 @@
+podTemplate(cloud: 'roger-k8s', 
+  containers: [
+    containerTemplate(
+      args: '9999999', 
+      command: 'sleep', 
+      image: 'hikather/aktools:jenkins-mvn-slave', 
+      name: 'maven', 
+      workingDir: '/home/jenkins/agent'), 
+    containerTemplate(
+      args: '9999999', 
+      command: 'sleep', 
+      image: 'gcr.io/kaniko-project/executor:debug', 
+      name: 'kaniko', 
+      workingDir: '/home/jenkins/agent')
+  ], 
+  name: 'kube-agent', 
+  namespace: 'devops-tools',
+  volumes: [
+      secretVolume(
+          defaultMode: '', 
+          mountPath: '/kaniko/.docker', 
+          optional: false, 
+          secretName: 'kaniko-secret'
+      )
+  ]
+) 
+{
+  node(POD_LABEL) {
+    stage('Get a Maven project') {
+      git url: 'https://github.com/akather/ak-react-ms-app.git', branch: 'sir-develop'
+      container('maven') {
+        stage('Build a Maven project') {
+          sh '''
+          cd $WORKSPACE
+          cd ms1
+          echo pwd
+          ls -lrt
+          mvn clean package
+          ls -lrt
+          ls -lrt target
+          '''
+        }
+      }
+    }
+
+    stage('Build Java Image') {
+      container('kaniko') {
+        stage('Build a Go project') {
+          sh '''
+            echo pwd
+            cd $WORKSPACE
+            cd ms1
+            ls -lrt
+            /kaniko/executor --context `pwd` --destination hikather/kapps:ms1.2
+          '''
+        }
+      }
+    }
+  }
+}
