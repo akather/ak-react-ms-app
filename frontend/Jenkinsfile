@@ -29,7 +29,7 @@ podTemplate(cloud: 'roger-k8s',
           cd frontend
           pwd
           ls -lrt
-          /kaniko/executor --context `pwd` --destination hikather/kapps:fe1.2
+          /kaniko/executor --context `pwd` --destination hikather/kapps:fe1.3
           ls -lrt
           '''
         }
