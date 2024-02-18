@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ms1-backend
+  namespace: devops-tools
 spec:
   replicas: 1
   selector:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
       - name: ms1-backend
-        image: hikather/kapps:ms1.1
+        image: hikather/kapps:ms1.2
         ports:
         - containerPort: 8080
           name: ms1-backend
@@ -27,6 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ms1-backend
+  namespace: devops-tools
 spec:
   selector:
     app: ms1-backend
