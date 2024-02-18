@@ -1,0 +1,35 @@
+podTemplate(cloud: 'roger-k8s', 
+  containers: [
+    containerTemplate(
+      args: '9999999', 
+      command: 'sleep', 
+      image: 'bitnami/kubectl:latest', 
+      name: 'kubectl',
+      runAsUser: '0',
+      workingDir: '/home/jenkins/agent')
+  ], 
+  name: 'kube-agent', 
+  namespace: 'devops-tools'
+) 
+{
+  node(POD_LABEL) {
+    stage('k8s deploy') {
+      git url: 'https://github.com/akather/ak-react-ms-app.git', branch: 'sir-develop'
+      container('kubectl') {
+        stage('k8s deploy project') {
+          sh '''
+          pwd
+          cd $WORKSPACE
+          cd k8s
+          ls -lrt
+          export KUBECONFIG=./config
+          echo $KUBECONFIG
+          kubectl apply -f be-install.yaml
+          kubectl apply -f fe-install.yaml
+          ls -lrt
+          '''
+        }
+      }
+    }
+  }
+}
