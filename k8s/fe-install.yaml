@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: ui-frontend
-        image: hikather/kapps:fe1.2
+        image: hikather/kapps:fe1.3
         ports:
         - containerPort: 3000
           name: ui-frontend
