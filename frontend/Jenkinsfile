@@ -1,0 +1,39 @@
+podTemplate(cloud: 'roger-k8s', 
+  containers: [
+    containerTemplate(
+      args: '9999999', 
+      command: 'sleep', 
+      image: 'gcr.io/kaniko-project/executor:debug', 
+      name: 'kaniko', 
+      workingDir: '/home/jenkins/agent')
+  ], 
+  name: 'kube-agent', 
+  namespace: 'devops-tools',
+  volumes: [
+      secretVolume(
+          defaultMode: '', 
+          mountPath: '/kaniko/.docker', 
+          optional: false, 
+          secretName: 'kaniko-secret'
+      )
+  ]
+) 
+{
+  node(POD_LABEL) {
+    stage('Frontend Build') {
+      git url: 'https://github.com/akather/ak-react-ms-app.git', branch: 'sir-develop'
+      container('kaniko') {
+        stage('Build a Frontend project') {
+          sh '''
+          cd $WORKSPACE
+          cd frontend
+          pwd
+          ls -lrt
+          /kaniko/executor --context `pwd` --destination hikather/kapps:fe1.2
+          ls -lrt
+          '''
+        }
+      }
+    }
+  }
+}
